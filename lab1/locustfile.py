@@ -1,4 +1,4 @@
-from locust import HttpLocust, TaskSet
+from locust import HttpUser, TaskSet
 import random
 
 PATHS = [
@@ -40,7 +40,7 @@ class UserBehavior(TaskSet):
     def on_start(self):
         pass
 
-class WebsiteUser(HttpLocust):
+class WebsiteUser(HttpUser):
     task_set = UserBehavior
     min_wait = 2000
     max_wait = 9000
