@@ -1,4 +1,4 @@
-from locust import HttpUser, TaskSet
+from locust import HttpUser, task, between
 import random
 
 PATHS = [
@@ -28,19 +28,13 @@ PATHS = [
     "Washington_D.C.",
 ]
 
-def index(l):
-    l.client.get("/")
-
-def query(l):
-    l.client.get("/" + random.choice(PATHS))
-
-class UserBehavior(TaskSet):
-    tasks = {index: 1, query: 4}
-
-    def on_start(self):
-        pass
-
 class WebsiteUser(HttpUser):
-    task_set = UserBehavior
-    min_wait = 2000
-    max_wait = 9000
+    wait_time = between(2, 9)
+    
+    @task
+    def index(self):
+        self.client.get("/")
+
+    @task(4)
+    def query(self):
+        self.client.get("/" + random.choice(PATHS))
